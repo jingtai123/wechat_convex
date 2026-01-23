@@ -432,6 +432,15 @@ npx convex run init:initAll
 
 <img src="miniprogram/images/reward_qrcode.jpg" width="200" alt="微信打赏二维码">
 
+## Star History
+
+<a href="https://www.star-history.com/#jingtai123/wechat_convex&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jingtai123/wechat_convex&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jingtai123/wechat_convex&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=jingtai123/wechat_convex&type=date&legend=top-left" />
+ </picture>
+</a>
 ---
 
 ## English
