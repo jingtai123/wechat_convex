@@ -1,0 +1,355 @@
+page {
+  /* Soft Light Blue Glow Background */
+  background: radial-gradient(circle at top left, #e0f2fe 0%, #bae6fd 40%, #7dd3fc 100%);
+  background-attachment: fixed;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft Yahei', sans-serif;
+  color: #0c4a6e;
+  min-height: 100vh;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40rpx, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Header & Search Area - Glassmorphism */
+.inquire-wrapper {
+  background: rgba(255, 255, 255, 0.3); /* Low opacity */
+  backdrop-filter: blur(20px); /* Strong blur */
+  -webkit-backdrop-filter: blur(20px);
+  height: 140rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  box-shadow: 0 4rpx 30rpx rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.search-wrapper {
+  width: 90%;
+  height: 90rpx;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 45rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: inset 0 2rpx 4rpx rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.search-wrapper:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.search-icon {
+  color: #5a7faa;
+  font-size: 40rpx;
+  margin-right: 24rpx;
+  font-weight: bold;
+}
+
+.search-wrapper input {
+  flex: 1;
+  font-size: 32rpx;
+  color: #1e3799; /* Matched with name color */
+  height: 100%;
+  font-weight: 600;
+}
+
+.placeholder-text {
+  color: #7f8c8d;
+}
+
+/* List Container */
+.phoneList {
+  /* margin-top: 140rpx; */
+  height: calc(100vh - 140rpx);
+  padding: 30rpx 30rpx;
+  box-sizing: border-box;
+}
+
+/* Card Style - Glassmorphism & Animation */
+.phoneItem {
+  background: rgba(255, 255, 255, 0.4); /* Higher transparency for better light play */
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 30rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+  /* Light Blue Shadow Glow */
+  box-shadow: 0 12rpx 40rpx rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+/* ... existing stagger animations ... */
+
+.phoneItem-hover {
+  transform: scale(0.99) translateY(2rpx);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8rpx 20rpx rgba(14, 165, 233, 0.1);
+}
+
+/* Avatar Section */
+.avatar-section {
+  margin-right: 30rpx;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); /* Blue Light Gradient */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 20rpx rgba(2, 132, 199, 0.3);
+  color: #fff;
+  font-size: 44rpx;
+  font-weight: bold;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+}
+
+/* Info Section (Name & Remark) */
+.info-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 16rpx;
+  min-width: 0;
+}
+
+.name {
+  font-size: 38rpx;
+  font-weight: 800;
+  color: #0369a1; /* Deep Sky Blue */
+  margin-bottom: 12rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Allow 2 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+  line-height: 1.3;
+}
+
+.remark-tag {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  background: rgba(14, 165, 233, 0.1); /* Soft Sky Blue Tag */
+  color: #0ea5e9;
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  max-width: 100%;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  box-shadow: 0 4rpx 8rpx rgba(14, 165, 233, 0.1);
+}
+
+.remark-tag text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.remark-tag .iconfont {
+  font-size: 26rpx;
+  margin-right: 8rpx;
+  display: inline-block;
+}
+
+/* Connection Section (Phone numbers) */
+.action-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 24rpx;
+  justify-content: center;
+}
+
+.phone-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.phone-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Tags Style - "Internal/External" */
+.tag {
+  font-size: 22rpx;
+  color: #fff;
+  padding: 6rpx 14rpx;
+  border-radius: 12rpx;
+  margin-right: 16rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.1);
+  min-width: 80rpx;
+  text-align: center;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.tag-in {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.tag-out {
+  background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+}
+
+.phone-num {
+  font-size: 34rpx;
+  color: #0c2461; /* Dark navy blue */
+  font-family: 'DIN Alternate', 'Roboto', 'Arial', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+/* Call Button */
+.call-btn-wrapper {
+  width: 80rpx; /* Larger button */
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  color: #409eff;
+  box-shadow: 0 4rpx 15rpx rgba(0,0,0,0.05);
+  border: 1px solid rgba(255, 255, 255, 1);
+  transition: all 0.2s;
+}
+
+.call-btn-wrapper:active {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(0.95);
+}
+
+.call-icon {
+  font-size: 40rpx; /* Larger icon */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer-spacer {
+  height: 60rpx;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  padding-top: 140rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Empty State - 垂直居中 */
+.content-wrapper empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 140rpx);
+}
+
+
+/* --- Dark Mode Adaptation --- */
+@media (prefers-color-scheme: dark) {
+  page {
+    /* Deep Blue Gradient background */
+    background: radial-gradient(circle at top left, #0f172a 0%, #1e293b 40%, #0f172a 100%);
+    color: #e2e8f0;
+  }
+
+  /* Header */
+  .inquire-wrapper {
+    background: rgba(30, 41, 59, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .search-wrapper {
+    background: rgba(15, 23, 42, 0.6);
+    box-shadow: inset 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .search-icon {
+    color: #94a3b8;
+  }
+
+  .search-wrapper input {
+    color: #e2e8f0;
+  }
+
+  .search-wrapper:active {
+    background: rgba(15, 23, 42, 0.8);
+  }
+
+  /* Phone List Item */
+  .phoneItem {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.4);
+  }
+
+  .phoneItem-hover {
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.3);
+  }
+
+  /* Avatar */
+  .avatar {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    box-shadow: 0 6rpx 20rpx rgba(2, 132, 199, 0.2);
+    color: #fff;
+  }
+
+  /* Text Colors */
+  .name {
+    color: #f1f5f9;
+    text-shadow: none;
+  }
+
+  .remark-tag {
+    background: rgba(14, 165, 233, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .phone-num {
+    color: #e2e8f0;
+  }
+  
+  /* Call Button */
+  .call-btn-wrapper {
+    background: rgba(51, 65, 85, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .call-btn-wrapper:active {
+    background: rgba(71, 85, 105, 0.8);
+  }
+}

@@ -1,0 +1,461 @@
+/* pages/home/home.wxss */
+
+/* --- 页面基础 (Festive Red Theme) --- */
+.home-page {
+  background: linear-gradient(180deg, #fff5f5 0%, #ffffff 100%);
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Festive Decorations */
+.festive-decor-left {
+  position: absolute;
+  top: -40rpx;
+  left: -40rpx;
+  width: 200rpx;
+  height: 200rpx;
+  background: radial-gradient(circle, rgba(255, 69, 58, 0.1), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.festive-decor-right {
+  position: absolute;
+  top: 100rpx;
+  right: -50rpx;
+  width: 300rpx;
+  height: 300rpx;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* --- Horse Hanging (整体摆动动画) --- */
+.horse-hanging {
+  position: absolute;
+  top: 0rpx;
+  left: 60rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+  transform-origin: top center;
+  animation: sway 4s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(3deg); }
+  50% { transform: rotate(-3deg); }
+}
+/* --- 鞭炮串容器 --- */
+.firecracker-string {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80rpx; /* 容器也可以稍微窄一点 */
+  /* 顶部预留空间，防止最上面的鞭炮被截断 */
+  padding-top: 40rpx;
+  /* 整体位置微调 */
+  margin-top: -10rpx; 
+  z-index: 30; 
+}
+
+/* 主绳 (贯穿的红线) */
+.firecracker-string::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  /* 稍微延伸到下部，确保连接马 */
+  bottom: 25rpx; 
+  width: 4rpx;
+  background: #8B0000;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -20;
+}
+
+/* 顶部的绳头 (隐藏，用 padding 代替视觉位置) */
+.rope {
+  width: 4rpx;
+  height: 0; 
+  margin-bottom: 0; 
+}
+
+/* --- 单个鞭炮节 (精致版) --- */
+.cracker {
+  position: relative;
+  /* 【尺寸缩小】更精致 */
+  width: 17rpx;  
+  height: 40rpx; 
+  box-sizing: border-box;
+  z-index: 2;
+  
+  /* 材质：立体红 */
+  background: linear-gradient(90deg, #ac1010 0%, #ff5e5e 45%, #ff5353 55%, #ad0e0e 100%);
+  border-radius: 5rpx;
+  box-shadow: 2rpx 2rpx 4rpx rgba(0, 0, 0, 0.35); 
+
+  /* 【金边变细】比例协调 */
+  border-top: 3rpx solid #ffd700;
+  border-bottom: 5rpx solid #ffd700;
+}
+
+/* --- 引信 (小白线 - 按比例缩小) --- */
+.cracker::before {
+  content: '';
+  position: absolute;
+  top: -4rpx; /* 缩短 */
+  left: 50%;
+  width: 2rpx;
+  height: 6rpx; /* 缩短 */
+  background: #e0e0e0;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+/* --- 关键布局修复：小角度自然下垂 --- */
+
+/* 偶数项 (微向右歪) */
+.cracker:nth-child(even) {
+  /* 【角度变小】30deg 更自然下垂
+     translateX(3rpx) 微调偏移，紧贴主绳
+  */
+  transform: translateX(3rpx) rotate(30deg);
+  transform-origin: top center; 
+  left: -5rpx;
+  /* 因为鞭炮变短了，堆叠间距也要减小 */
+  margin-top: -26rpx; 
+}
+
+/* 奇数项 (微向左歪) */
+.cracker:nth-child(odd) {
+  transform: translateX(-3rpx) rotate(-30deg);
+  transform-origin: top center;
+  right: -5rpx;
+  margin-top: -26rpx;
+}
+
+/* 第一个鞭炮 (修复位置) */
+/* 不需要向上挤压，放在 padding 预留的位置 */
+.cracker:nth-child(2) {
+  margin-top: 0rpx !important; 
+}
+
+/* 随机微调 (按新尺寸比例调整) */
+.cracker:nth-child(3n) { height: 36rpx; }
+.cracker:nth-child(4n) { width: 14rpx; }
+
+
+/* --- 挂件部分 (马 + 文字) --- */
+.horse-circle {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 50%;
+  border: 4rpx solid #ffd700;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4rpx 15rpx rgba(212, 48, 48, 0.4);
+  /* 【关键连接】向上拉更多，紧贴鞭炮尾部 */
+  margin-top: -28rpx;
+  position: relative;
+  z-index: 20;
+}
+
+.horse-circle image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ornament-pill {
+  font-size: 20rpx;
+  font-weight: bold;
+  color: #ffffff;
+  background: #d43030;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  margin-top: -20rpx;
+  z-index: 21; /* 确保文字浮在最上面 */
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.2);
+}
+
+/* --- User Header (Simplified & Optimized) --- */
+.user-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* push logout to right */
+  padding: 24rpx 36rpx;
+  margin: 20rpx 24rpx;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 60rpx; /* more rounded like a pill */
+  box-shadow: 0 6rpx 20rpx rgba(212, 48, 48, 0.08); /* softer shadow */
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle decorative glow */
+.user-header::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 200rpx;
+  height: 200rpx;
+  background: radial-gradient(circle, rgba(235, 59, 90, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.user-content-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  flex: 1;
+  overflow: hidden; /* prevent overflow on small screens */
+}
+
+.text-group {
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.greeting {
+  font-size: 26rpx;
+  color: #666;
+  margin-right: 4rpx;
+}
+
+.user-name-text {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.tags-group {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.info-tag {
+  font-size: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.info-tag.phone {
+  color: #d43030;
+  background: rgba(212, 48, 48, 0.08);
+  font-family: monospace;
+}
+
+.info-tag.dept {
+  color: #555;
+  background: #f0f0f2;
+}
+
+.logout-btn-simple {
+  font-size: 26rpx;
+  color: #999;
+  padding: 10rpx 20rpx;
+  margin-left: 10rpx;
+  flex-shrink: 0;
+  transition: opacity 0.3s;
+}
+
+.logout-btn-simple:active {
+  opacity: 0.7;
+}
+
+/* --- Festive Section Header --- */
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 50rpx 20rpx;
+  position: relative;
+}
+
+.header-accent-festive {
+  display: inline-block;
+  width: 10rpx;
+  height: 40rpx;
+  background: linear-gradient(180deg, #eb3b5a, #fa8231);
+  border-radius: 6rpx;
+  margin-right: 18rpx;
+  box-shadow: 0 4rpx 10rpx rgba(235, 59, 90, 0.3);
+}
+
+.header-title-festive {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #1c1c1e;
+  letter-spacing: 1rpx;
+}
+
+.festive-wish {
+  font-size: 24rpx;
+  color: #d43030;
+  margin-left: auto;
+  font-weight: bold;
+  opacity: 0.8;
+  letter-spacing: 2rpx;
+}
+
+/* --- 工具网格 --- */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40rpx 30rpx;
+  padding: 0 40rpx;
+}
+
+/* --- 工具卡片 --- */
+.tool-card {
+  height: 220rpx; 
+  padding: 10rpx;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.tool-card:active {
+  transform: scale(0.96);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.icon-wrapper {
+  width: 110rpx; 
+  height: 110rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.5); 
+  border-radius: 28rpx; 
+  box-shadow: 0 4rpx 12rpx rgba(212, 48, 48, 0.05);
+}
+
+.tool-icon {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+.tool-name {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #333;
+  text-align: center;
+  line-height: 1.2;
+  height: 64rpx; 
+  width: 90%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Dark Mode Adaptation --- */
+@media (prefers-color-scheme: dark) {
+  .home-page {
+    background: linear-gradient(180deg, #1e1e1f 0%, #2a2a2c 100%);
+  }
+
+  .header-title-festive {
+    color: #f1f2f6 !important;
+  }
+
+  .user-header {
+    background: linear-gradient(135deg, #2b2c30, #232325);
+    border-color: rgba(212, 48, 48, 0.2);
+  }
+
+  .user-name-text {
+    color: #f1f2f6;
+  }
+
+  .user-phone {
+    background: rgba(212, 48, 48, 0.15);
+  }
+
+  .tool-card {
+    background: linear-gradient(145deg, #2b2c30, #232325);
+    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.6);
+  }
+
+  .tool-name {
+    color: #f1f2f6 !important;
+  }
+
+  .icon-wrapper {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+/* --- Animations --- */
+.fade-in {
+  animation: fadeIn 0.8s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-down {
+  animation: slideDown 0.8s ease both;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.float-card {
+  animation: floatUp 5s ease-in-out infinite;
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6rpx); }
+}
+
+/* Ripple effect */
+.ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20rpx;
+  height: 20rpx;
+  background: rgba(235, 59, 90, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tool-card:active .ripple {
+  animation: rippleEffect 0.6s ease-out;
+}
+
+@keyframes rippleEffect {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(12); opacity: 0; }
+}

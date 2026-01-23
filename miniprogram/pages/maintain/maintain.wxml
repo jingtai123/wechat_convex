@@ -1,0 +1,89 @@
+<view class="container">
+  <!-- WXS module for array helper (moved to top) -->
+  <wxs module="utils">
+    function includes(arr, val) {
+      if (!arr) return false;
+      // Use loose equality to handle potential string/number mismatches
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == val) return true;
+      }
+      return false;
+    }
+    module.exports = { includes: includes };
+  </wxs>
+
+  <!-- Tabs -->
+  <view class="tabs">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="id" 
+      class="tab-item {{activeTab === item.id ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-id="{{item.id}}"
+    >
+      {{item.name}}
+    </view>
+  </view>
+
+  <!-- Content Area -->
+  <scroll-view scroll-y class="content-scroll" bindscrolltolower="onReachBottom">
+    
+    <!-- 5. Telbook Management -->
+    <view wx:if="{{activeTab === 'telbook'}}" class="module-section">
+      <view class="header-row column">
+        <view class="row-between">
+           <text class="section-title">电话簿</text>
+           <view class="btn btn-add" bindtap="openTelbookAdd">新增</view>
+        </view>
+        <input class="search-input" placeholder="搜索名称..." bindconfirm="onSearchTelbook" bindinput="onSearchInput" value="{{telbookSearch}}"/>
+      </view>
+      <view class="card-list">
+        <view class="card-item" wx:for="{{telbooks}}" wx:key="_id">
+          <view class="card-main">
+             <view class="card-title">{{item.name}}</view>
+             <view class="card-sub">{{item.remark}}</view>
+             <view class="card-row mt-10">
+               <text class="phone-item">外: {{item.outPhone}}</text>
+               <text class="phone-item">内: {{item.inPhone}}</text>
+             </view>
+          </view>
+           <view class="card-actions">
+            <view class="btn btn-primary" bindtap="openTelbookEdit" data-item="{{item}}">编辑</view>
+            <view class="btn btn-danger" bindtap="deleteTelbook" data-id="{{item._id}}">删除</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+
+  <!-- Modals -->
+  
+  <!-- Modal Overlay (Common for all modals) -->
+  <view class="modal-overlay" wx:if="{{showTelbookModal}}" catchtouchmove="true">
+    <view class="modal-mask" bindtap="closeAllModals"></view>
+    <!-- Telbook Modal Content -->
+    <view class="modal-container show">
+      <view class="modal-header">{{isEdit ? '编辑' : '新增'}}电话簿</view>
+      <scroll-view scroll-y style="max-height: 70vh;">
+        <view class="form-group">
+          <text class="label">部门/名称</text>
+          <input class="input" value="{{formData.name}}" data-field="name" bindinput="handleInput" />
+        </view>
+        <view class="form-group">
+          <text class="label">备注/位置</text>
+          <input class="input" value="{{formData.remark}}" data-field="remark" bindinput="handleInput" />
+        </view>
+         <view class="form-group">
+          <text class="label">外线</text>
+          <input class="input" value="{{formData.outPhone}}" data-field="outPhone" bindinput="handleInput" />
+        </view>
+        <view class="form-group">
+          <text class="label">内线</text>
+          <input class="input" value="{{formData.inPhone}}" data-field="inPhone" bindinput="handleInput" />
+        </view>
+        <button class="submit-btn" bindtap="submitTelbook">保存</button>
+      </scroll-view>
+    </view>
+  </view>
+</view>

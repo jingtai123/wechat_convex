@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "empty": "/components/empty/empty"
+  },
+  "navigationBarTitleText": "电话号码查询",
+  "navigationBarBackgroundColor": "@telbookNavBgColor",
+  "navigationBarTextStyle": "@navTxtStyle",
+  "disableScroll": true
+}

@@ -1,0 +1,42 @@
+/* components/banner/banner.wxss */
+.swiper {
+  height: calc(100vw / 1080 * 720);
+
+}
+
+.swiper .img {
+  width: 100vw;
+  height: 100%;
+}
+
+.banner {
+  position: relative;
+}
+
+.dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dots .dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  margin: 0 8rpx;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.dots .dot.active {
+  width: 32rpx; /* Pill shape */
+  height: 12rpx;
+  background: #ffffff;
+  border-radius: 6rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.2), 0 0 15rpx rgba(255, 255, 255, 0.5); /* Glow effect */
+}

@@ -1,0 +1,34 @@
+<view class="container fade-in">
+  <view class="header-section">
+    <view class="icon-wrapper">
+      <text class="iconfont icon-coffee" style="font-size: 80rpx; color: #ff6b81;"></text>
+    </view>
+    <text class="title">感谢您的支持</text>
+    <text class="subtitle">您的鼓励是我坚持更新的最大动力</text>
+  </view>
+
+  <view class="card">
+    <view class="message-box">
+      <view class="quote-start">“</view>
+      <text class="message-text">开发维护不易，如果您觉得这个小工具对您的工作有所帮助，不妨请我喝杯咖啡吧！☕️ \n\n每一份支持都将投入到服务器维护和新功能的开发中。</text>
+      <view class="quote-end">”</view>
+    </view>
+
+    <view class="qr-section">
+      <view class="qr-container">
+        <!-- Placeholder for the QR Code -->
+        <image class="qr-code" src="{{qrCodeUrl}}" mode="aspectFit" show-menu-by-longpress></image>
+        <view class="scan-tip">长按保存图片或识别</view>
+      </view>
+      <view class="payment-methods">
+        <view class="method active">
+          <text class="iconfont icon-wechat"></text> 微信支付
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <text>© 2026 Made with LeanOn❤️</text>
+  </view>
+</view>

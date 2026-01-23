@@ -1,0 +1,6 @@
+<view class="empty-wrapper">
+  <view class="empty-icon">
+    <image class="empty-img" mode="aspectFill" src="/images/empty.svg"></image>
+    <text class="empty-hint">没有搜索到结果</text>
+  </view>
+</view>

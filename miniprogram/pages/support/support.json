@@ -1,0 +1,6 @@
+{
+    "usingComponents": {},
+    "navigationBarTitleText": "支持开发",
+    "navigationBarBackgroundColor": "@navBgColor",
+    "navigationBarTextStyle": "@navTxtStyle"
+}

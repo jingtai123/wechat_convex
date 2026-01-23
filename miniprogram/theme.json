@@ -1,0 +1,18 @@
+{
+  "light": {
+    "navBgColor": "#ffffff",
+    "navTxtStyle": "black",
+    "telbookNavBgColor": "#e0f2fe",
+    "backgroundColor": "#ffffff",
+    "backgroundColorTop": "#ffffff",
+    "backgroundColorBottom": "#ffffff"
+  },
+  "dark": {
+    "navBgColor": "#1e1e1f",
+    "navTxtStyle": "white",
+    "telbookNavBgColor": "#1e1e1f",
+    "backgroundColor": "#1e1e1f",
+    "backgroundColorTop": "#1e1e1f",
+    "backgroundColorBottom": "#1e1e1f"
+  }
+}

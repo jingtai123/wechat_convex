@@ -1,0 +1,92 @@
+<view class="register-page fade-in">
+  <!-- Background Decorations -->
+  <view class="festive-decor-left"></view>
+  <view class="festive-decor-right"></view>
+  <view class="festive-decor-bottom"></view>
+
+  <view class="register-content slide-up">
+    <!-- Logo Area -->
+    <view class="logo-area">
+      <view class="logo-circle">
+        <text class="logo-text">甘</text>
+      </view>
+      <text class="app-name">注册申请</text>
+      <text class="app-slogan">提交申请后需管理员审核</text>
+    </view>
+
+    <!-- Register Card -->
+    <view class="register-card">
+      <view class="card-header">
+        <view class="header-accent"></view>
+        <text class="card-title">填写注册信息</text>
+      </view>
+
+      <!-- 手机号输入 -->
+      <view class="input-group">
+        <view class="input-icon">
+          <view class="icon-phone-shape"></view>
+        </view>
+        <input
+          class="register-input"
+          placeholder="请输入手机号"
+          placeholder-class="placeholder-style"
+          type="number"
+          maxlength="11"
+          bindinput="handlePhoneInput"
+          value="{{phoneNumber}}"
+        />
+      </view>
+
+      <!-- 姓名输入 -->
+      <view class="input-group">
+        <view class="input-icon">
+          <view class="icon-user-shape"></view>
+        </view>
+        <input
+          class="register-input"
+          placeholder="请输入真实姓名"
+          placeholder-class="placeholder-style"
+          type="text"
+          maxlength="20"
+          bindinput="handleNameInput"
+          value="{{userName}}"
+        />
+      </view>
+
+      <!-- 科室输入 -->
+      <view class="input-group">
+        <view class="input-icon">
+          <view class="icon-hospital-shape"></view>
+        </view>
+        <input
+          class="register-input"
+          placeholder="请输入所属科室"
+          placeholder-class="placeholder-style"
+          type="text"
+          maxlength="30"
+          bindinput="handleDepartmentInput"
+          value="{{department}}"
+        />
+      </view>
+
+      <button class="register-btn" bindtap="handleSubmit" disabled="{{submitting}}">
+        <text>{{submitting ? '提交中...' : '提交注册申请'}}</text>
+      </button>
+
+      <view class="tips">
+        <text class="tips-text">提交后请等待管理员审核，审核通过后即可登录</text>
+      </view>
+
+      <!-- 返回登录 -->
+      <view class="back-link" bindtap="goBack">
+        <text class="back-text">已有账号？返回登录</text>
+      </view>
+    </view>
+
+    <!-- Footer -->
+    <view class="footer">
+      <text class="footer-text">LeanOn</text>
+    </view>
+  </view>
+
+</view>

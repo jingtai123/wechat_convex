@@ -1,0 +1,59 @@
+<view class="home-page fade-in">
+  <view class="festive-decor-left"></view>
+  <view class="festive-decor-right"></view>
+
+  <my-banner swiperArr="{{swiperArr}}"></my-banner>
+
+  <view class="horse-hanging">
+    <view class="firecracker-string">
+      <view class="rope"></view>
+      <view class="cracker" wx:for="{{10}}" wx:key="index"></view>
+    </view>
+    
+    <view class="horse-circle shadow-glow">
+      <image src="/images/festive_horse.png" mode="aspectFill"></image>
+    </view>
+    <text class="ornament-pill">2026 马到成功</text>
+  </view>
+
+  <view wx:if="{{loading}}" style="text-align:center; padding: 20rpx;">
+    正在获取用户信息...
+  </view>
+
+  <view wx:else class="user-header">
+    <view class="user-content-row">
+      <view class="text-group">
+        <text class="greeting">欢迎，</text>
+        <text class="user-name-text">{{userInfo.name || '同事'}}</text>
+      </view>
+      <view class="tags-group">
+        <text class="info-tag phone">{{userInfo.phone}}</text>
+        <text class="info-tag dept" wx:if="{{userInfo.department}}">{{userInfo.department}}</text>
+      </view>
+    </view>
+    <view class="logout-btn-simple" bindtap="handleLogout">退出</view>
+  </view>
+
+  <view class="section-header slide-down">
+    <text class="header-accent-festive"></text>
+    <text class="header-title-festive">小工具</text>
+    <text class="festive-wish">万事如意 · 龙马精神</text>
+  </view>
+
+  <view class="tool-grid">
+    <view
+      wx:for="{{myToolArr}}"
+      wx:key="_id"
+      bindtap="goTool"
+      id="{{item._id}}"
+      class="tool-card float-card"
+    >
+      <view class="ripple"></view>
+
+      <view class="icon-wrapper">
+        <image src="{{item.icon}}" mode="aspectFit" class="tool-icon"></image>
+      </view>
+      <text class="tool-name">{{item.name}}</text>
+    </view>
+  </view>
+</view>

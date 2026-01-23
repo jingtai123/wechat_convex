@@ -1,0 +1,29 @@
+.empty-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.empty-icon {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-hint {
+  color: #0990ff;
+  display: inline-block;
+  font-size: 36rpx;
+  text-align: center;
+  width: 100%;
+  margin-top: 30rpx;
+}
+
+.empty-img {
+  width: 300rpx;
+  height: 300rpx;
+}

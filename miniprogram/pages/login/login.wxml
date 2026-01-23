@@ -1,0 +1,82 @@
+<view class="login-page fade-in">
+  <!-- Festive Background Elements -->
+  <view class="festive-decor-left"></view>
+  <view class="festive-decor-right"></view>
+  <view class="festive-decor-bottom"></view>
+
+  <!-- Loading State -->
+  <view wx:if="{{isCheckingAuth}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在检查登录状态...</text>
+  </view>
+
+  <!-- Login Form -->
+  <view wx:else class="login-content slide-up">
+    <!-- Logo Area -->
+    <view class="logo-area">
+      <view class="logo-circle">
+        <text class="logo-text">甘</text>
+      </view>
+      <text class="app-name">信息科工具箱</text>
+      <text class="app-slogan">便捷办公 · 高效协作</text>
+    </view>
+
+    <!-- Login Card -->
+    <view class="login-card">
+      <view class="card-header">
+        <view class="header-accent"></view>
+        <text class="card-title">登录</text>
+      </view>
+
+      <!-- 手机号输入 -->
+      <view class="input-group">
+        <view class="input-icon">
+          <view class="icon-phone-shape"></view>
+        </view>
+        <input
+          class="login-input"
+          placeholder="请输入授权手机号"
+          placeholder-class="placeholder-style"
+          type="number"
+          maxlength="11"
+          bindinput="handlePhoneInput"
+          value="{{phoneNumber}}"
+        />
+      </view>
+
+      <!-- 姓名输入 -->
+      <view class="input-group" style="margin-top: 24rpx;">
+        <view class="input-icon">
+          <view class="icon-user-shape"></view>
+        </view>
+        <input
+          class="login-input"
+          placeholder="请输入真实姓名"
+          placeholder-class="placeholder-style"
+          type="text"
+          maxlength="20"
+          bindinput="handleNameInput"
+          value="{{userName}}"
+        />
+      </view>
+
+      <button class="login-btn" bindtap="handleSubmit">
+        <text>验证并登录</text>
+      </button>
+
+      <view class="tips">
+        <text class="tips-text">请使用OA系统中绑定的手机号和真实姓名登录</text>
+      </view>
+
+      <!-- 注册入口 -->
+      <view class="register-link" bindtap="goToRegister">
+        <text class="register-text">没有账号？申请注册</text>
+      </view>
+    </view>
+
+    <!-- Footer -->
+    <view class="footer">
+      <text class="footer-text">LeanOn</text>
+    </view>
+  </view>
+</view>

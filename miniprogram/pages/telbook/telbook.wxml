@@ -1,0 +1,43 @@
+<view class="inquire-wrapper">
+  <view class="search-wrapper">
+    <text class="icon-search iconfont search-icon"></text>
+    <input type="text" placeholder="输入查询信息" placeholder-class="placeholder-text" bindinput="inputHandle" />
+  </view>
+</view>
+
+<view class="content-wrapper">
+  <view class="holder" wx:if="{{phoneList.length}}"></view>
+  <empty wx:if="{{!phoneList.length}}"></empty>
+  <scroll-view scroll-y scroll-top="{{scrollTop}}" class="phoneList" wx:if="{{phoneList.length}}">
+    <view class="phoneItem" wx:for="{{phoneList}}" wx:key="_id" wx:for-index="idx" bindtap="makePhoneCall" id="{{item.OUTPHONE}}" hover-class="phoneItem-hover">
+
+      <!-- Info Section -->
+      <view class="info-group">
+        <view class="name-row">
+            <text class="name">{{item.NAME}}</text>
+        </view>
+        <view class="remark-tag" wx:if="{{item.REMARK}}">
+          <text class="iconfont icon-dingwei"></text>
+          <text>{{item.REMARK}}</text>
+        </view>
+      </view>
+
+      <!-- Connection Section -->
+      <view class="action-group">
+        <view class="phone-row" wx:if="{{item.INPHONE}}">
+          <text class="phone-num">{{item.INPHONE}}</text>
+        </view>
+        <view class="phone-row" wx:if="{{item.OUTPHONE}}">
+          <text class="phone-num">{{item.OUTPHONE}}</text>
+        </view>
+      </view>
+      
+      <!-- Call Action -->
+      <!-- <view class="call-btn-wrapper">
+        <text class="iconfont icon-dianhua call-icon"></text>
+      </view> -->
+
+    </view>
+    <view class="footer-spacer"></view>
+  </scroll-view>
+</view>

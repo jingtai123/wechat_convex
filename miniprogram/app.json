@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/register/register",
+    "pages/telbook/telbook",
+    "pages/manager/manager",
+    "pages/maintain/maintain",
+    "pages/support/support"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "@navBgColor",
+    "navigationBarTitleText": "信息科工具",
+    "navigationBarTextStyle": "@navTxtStyle"
+  },
+  "sitemapLocation": "sitemap.json",
+  "darkmode": true,
+  "themeLocation": "theme.json"
+}

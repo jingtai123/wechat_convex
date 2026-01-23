@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "my-banner": "/components/banner/banner"
+  },
+  "navigationStyle": "custom",
+  "disableScroll": true,
+  "backgroundTextStyle": "dark"
+}
