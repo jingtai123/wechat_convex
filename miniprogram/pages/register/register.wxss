@@ -275,6 +275,87 @@
   border-top: 14rpx solid #999;
 }
 
+/* --- Agreement Section --- */
+.agreement-section {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+  padding: 16rpx 0;
+}
+
+.agreement-checkbox {
+  padding: 4rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.checkbox-icon {
+  width: 36rpx;
+  height: 36rpx;
+  border: 3rpx solid #ccc;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.checkbox-icon.checked {
+  background: linear-gradient(135deg, #eb3b5a 0%, #d43030 100%);
+  border-color: #d43030;
+}
+
+.check-mark {
+  width: 16rpx;
+  height: 10rpx;
+  border-left: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(-45deg) translateY(-2rpx);
+}
+
+.agreement-text {
+  flex: 1;
+  font-size: 24rpx;
+  line-height: 1.6;
+  flex-wrap: wrap;
+}
+
+.agreement-desc {
+  color: #666;
+}
+
+.agreement-link {
+  color: #d43030;
+  font-weight: 500;
+}
+
+.agreement-link:active {
+  opacity: 0.7;
+}
+
+/* --- Privacy Notice --- */
+.privacy-notice {
+  display: flex;
+  align-items: center;
+  background: rgba(212, 48, 48, 0.06);
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.notice-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+
+.notice-text {
+  font-size: 22rpx;
+  color: #888;
+  flex: 1;
+  line-height: 1.5;
+}
+
 /* --- Register Button --- */
 .register-btn {
   width: 100% !important;
@@ -330,6 +411,7 @@
   font-size: 28rpx;
   color: #d43030;
   font-weight: 500;
+  letter-spacing: 1rpx;
 }
 
 .back-link:active {
@@ -426,8 +508,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .slide-up {
@@ -439,6 +526,7 @@
     opacity: 0;
     transform: translateY(60rpx);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -506,5 +594,155 @@
 
   .picker-item {
     color: #f1f2f6;
+  }
+}
+
+/* --- Agreement Modal --- */
+.agreement-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  /* Bottom sheet style */
+  justify-content: center;
+}
+
+.agreement-modal-mask.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.agreement-modal-container {
+  width: 100%;
+  max-height: 85vh;
+  background: #ffffff;
+  border-radius: 40rpx 40rpx 0 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.agreement-modal-mask.show .agreement-modal-container {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: 30rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title-bar {
+  width: 80rpx;
+  height: 8rpx;
+  background: #e0e0e0;
+  border-radius: 4rpx;
+  margin-bottom: 24rpx;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.modal-close {
+  position: absolute;
+  right: 40rpx;
+  top: 40rpx;
+  font-size: 40rpx;
+  color: #ccc;
+  line-height: 1;
+  padding: 10rpx;
+}
+
+.modal-content-scroll {
+  flex: 1;
+  min-height: 400rpx;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-text-content {
+  padding: 40rpx;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.agreement-section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #333;
+  margin-top: 30rpx;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.agreement-paragraph {
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.modal-footer {
+  padding: 30rpx 40rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.modal-confirm-btn {
+  background: #d43030 !important;
+  color: #fff !important;
+  border-radius: 50rpx !important;
+  font-size: 32rpx !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
+  line-height: 90rpx !important;
+  height: 90rpx !important;
+  box-shadow: 0 8rpx 20rpx rgba(212, 48, 48, 0.3) !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* Dark mode for modal */
+@media (prefers-color-scheme: dark) {
+  .agreement-modal-container {
+    background: #1e1e1f;
+  }
+
+  .modal-title {
+    color: #f1f2f6;
+  }
+
+  .modal-header,
+  .modal-footer {
+    border-color: #333;
+  }
+
+  .modal-text-content {
+    color: #aaa;
+  }
+
+  .agreement-section-title {
+    color: #f1f2f6;
+  }
+
+  .modal-title-bar {
+    background: #444;
   }
 }
