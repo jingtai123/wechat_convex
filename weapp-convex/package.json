@@ -1,10 +1,17 @@
 {
   "name": "weapp-convex",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
-  "license": "Apache-2.0",
-  "description": "WeChat Mini Program with Convex Backend",
+  "license": "MIT",
+  "homepage": "https://github.com/workos/template-convex-react-vite-authkit/#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/workos/template-convex-react-vite-authkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/workos/template-convex-react-vite-authkit/issues"
+  },
   "scripts": {
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
     "dev:frontend": "vite --open",
@@ -17,8 +24,10 @@
   },
   "dependencies": {
     "@convex-dev/eslint-plugin": "^1.1.1",
-    "convex": "^1.31.0",
-    "dotenv": "^16.4.5"
+    "@workos-inc/authkit-react": "^0.13.0",
+    "convex": "^1.31.6",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

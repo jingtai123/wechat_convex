@@ -1,19 +1,34 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requirePermission } from "./lib/auth";
 
 // ============================================================
 // 1. 用户管理 (Users)
 // ============================================================
 
 export const listUsers = query({
-    args: {},
-    handler: async (ctx) => {
-        return await ctx.db.query("users").collect();
+    args: { token: v.string() },
+    handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
+        const users = await ctx.db.query("users").collect();
+
+        // 返回数据脱敏：不返回 token 和 openid
+        return users.map(u => ({
+            _id: u._id,
+            phoneNumber: u.phoneNumber,
+            name: u.name,
+            department: u.department,
+            roleId: u.roleId,
+            lastLogin: u.lastLogin,
+        }));
     },
 });
 
 export const updateUser = mutation({
     args: {
+        token: v.string(),
         id: v.id("users"),
         name: v.optional(v.string()),
         department: v.optional(v.string()),
@@ -21,15 +36,48 @@ export const updateUser = mutation({
         phoneNumber: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
-        const { id, ...updates } = args;
+        // 验证系统管理权限 (menuId = 0)
+        const operator = await requirePermission(ctx, args.token, 0);
+
+        const { token, id, ...updates } = args;
+
+        // 自我操作防护：防止修改自己的角色权限
+        if (updates.roleId !== undefined && id === operator._id) {
+            throw new Error("不能修改自己的角色权限");
+        }
+
         await ctx.db.patch(id, updates);
         return { success: true };
     },
 });
 
 export const deleteUser = mutation({
-    args: { id: v.id("users") },
+    args: {
+        token: v.string(),
+        id: v.id("users")
+    },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        const operator = await requirePermission(ctx, args.token, 0);
+
+        // 自我操作防护：防止删除自己
+        if (args.id === operator._id) {
+            throw new Error("不能删除自己的账号");
+        }
+
+        // 获取要删除的用户信息
+        const userToDelete = await ctx.db.get(args.id);
+
+        // 防止删除最后一个管理员
+        if (userToDelete?.roleId === 0) {
+            const allUsers = await ctx.db.query("users").collect();
+            const adminCount = allUsers.filter(u => u.roleId === 0).length;
+
+            if (adminCount <= 1) {
+                throw new Error("不能删除最后一个管理员账号");
+            }
+        }
+
         await ctx.db.delete(args.id);
         return { success: true };
     },
@@ -40,8 +88,11 @@ export const deleteUser = mutation({
 // ============================================================
 
 export const listPendingUsers = query({
-    args: {},
+    args: { token: v.string() },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         // 只获取状态为 pending 的
         return await ctx.db
             .query("pendingUsers")
@@ -51,8 +102,14 @@ export const listPendingUsers = query({
 });
 
 export const approveUser = mutation({
-    args: { id: v.id("pendingUsers") },
+    args: {
+        token: v.string(),
+        id: v.id("pendingUsers")
+    },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         const pending = await ctx.db.get(args.id);
         if (!pending) throw new Error("申请不存在");
         if (pending.status !== "pending") throw new Error("申请状态已变更");
@@ -87,10 +144,14 @@ export const approveUser = mutation({
 
 export const rejectUser = mutation({
     args: {
+        token: v.string(),
         id: v.id("pendingUsers"),
         reason: v.string()
     },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         const pending = await ctx.db.get(args.id);
         if (!pending) throw new Error("申请不存在");
 
@@ -108,8 +169,11 @@ export const rejectUser = mutation({
 // ============================================================
 
 export const listMenus = query({
-    args: {},
-    handler: async (ctx) => {
+    args: { token: v.string() },
+    handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         // 获取所有菜单并按sortOrder排序
         const menus = await ctx.db.query("menus").collect();
         return menus.sort((a, b) => a.sortOrder - b.sortOrder);
@@ -118,6 +182,7 @@ export const listMenus = query({
 
 export const createMenu = mutation({
     args: {
+        token: v.string(),
         // menuId removed, auto-generated
         name: v.string(),
         icon: v.string(),
@@ -127,6 +192,11 @@ export const createMenu = mutation({
         isActive: v.boolean(),
     },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
+        const { token, ...menuData } = args;
+
         // Auto-generate menuId: find max existing menuId + 1
         // Since we can't sort nicely by menuId without fetching all, we fetch all.
         // For small tables this is fine.
@@ -135,7 +205,7 @@ export const createMenu = mutation({
         const newMenuId = maxId + 1;
 
         await ctx.db.insert("menus", {
-            ...args,
+            ...menuData,
             menuId: newMenuId,
             createdAt: Date.now(),
         });
@@ -145,6 +215,7 @@ export const createMenu = mutation({
 
 export const updateMenu = mutation({
     args: {
+        token: v.string(),
         id: v.id("menus"),
         menuId: v.optional(v.number()),
         name: v.optional(v.string()),
@@ -155,15 +226,24 @@ export const updateMenu = mutation({
         isActive: v.optional(v.boolean()),
     },
     handler: async (ctx, args) => {
-        const { id, ...updates } = args;
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
+        const { token, id, ...updates } = args;
         await ctx.db.patch(id, updates);
         return { success: true };
     },
 });
 
 export const deleteMenu = mutation({
-    args: { id: v.id("menus") },
+    args: {
+        token: v.string(),
+        id: v.id("menus")
+    },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         await ctx.db.delete(args.id);
         return { success: true };
     },
@@ -174,14 +254,18 @@ export const deleteMenu = mutation({
 // ============================================================
 
 export const listRoles = query({
-    args: {},
-    handler: async (ctx) => {
+    args: { token: v.string() },
+    handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         return await ctx.db.query("roles").collect();
     },
 });
 
 export const createRole = mutation({
     args: {
+        token: v.string(),
         // roleId removed, auto-generated
         name: v.string(),
         description: v.optional(v.string()),
@@ -189,13 +273,18 @@ export const createRole = mutation({
         isDefault: v.optional(v.boolean()),
     },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
+        const { token, ...roleData } = args;
+
         // Auto-generate roleId: find max existing roleId + 1
         const allRoles = await ctx.db.query("roles").collect();
         const maxId = allRoles.reduce((max, r) => (r.roleId > max ? r.roleId : max), 0);
         const newRoleId = maxId + 1;
 
         await ctx.db.insert("roles", {
-            ...args,
+            ...roleData,
             roleId: newRoleId,
             createdAt: Date.now(),
         });
@@ -205,6 +294,7 @@ export const createRole = mutation({
 
 export const updateRole = mutation({
     args: {
+        token: v.string(),
         id: v.id("roles"),
         roleId: v.optional(v.number()),
         name: v.optional(v.string()),
@@ -213,15 +303,24 @@ export const updateRole = mutation({
         isDefault: v.optional(v.boolean()),
     },
     handler: async (ctx, args) => {
-        const { id, ...updates } = args;
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
+        const { token, id, ...updates } = args;
         await ctx.db.patch(id, updates);
         return { success: true };
     },
 });
 
 export const deleteRole = mutation({
-    args: { id: v.id("roles") },
+    args: {
+        token: v.string(),
+        id: v.id("roles")
+    },
     handler: async (ctx, args) => {
+        // 验证系统管理权限 (menuId = 0)
+        await requirePermission(ctx, args.token, 0);
+
         await ctx.db.delete(args.id);
         return { success: true };
     },
@@ -232,8 +331,14 @@ export const deleteRole = mutation({
 // ============================================================
 
 export const listTelbooks = query({
-    args: { search: v.optional(v.string()) },
+    args: {
+        token: v.string(),
+        search: v.optional(v.string())
+    },
     handler: async (ctx, args) => {
+        // 验证系统维护权限 (menuId = 1)
+        await requirePermission(ctx, args.token, 1);
+
         if (args.search) {
             return await ctx.db
                 .query("ssy_telbook")
@@ -246,14 +351,20 @@ export const listTelbooks = query({
 
 export const createTelbook = mutation({
     args: {
+        token: v.string(),
         name: v.string(),
         remark: v.string(),
         outPhone: v.string(),
         inPhone: v.string(),
     },
     handler: async (ctx, args) => {
+        // 验证系统维护权限 (menuId = 1)
+        await requirePermission(ctx, args.token, 1);
+
+        const { token, ...telbookData } = args;
+
         await ctx.db.insert("ssy_telbook", {
-            ...args,
+            ...telbookData,
             createdAt: Date.now(),
         });
         return { success: true };
@@ -262,6 +373,7 @@ export const createTelbook = mutation({
 
 export const updateTelbook = mutation({
     args: {
+        token: v.string(),
         id: v.id("ssy_telbook"),
         name: v.optional(v.string()),
         remark: v.optional(v.string()),
@@ -269,15 +381,24 @@ export const updateTelbook = mutation({
         inPhone: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
-        const { id, ...updates } = args;
+        // 验证系统维护权限 (menuId = 1)
+        await requirePermission(ctx, args.token, 1);
+
+        const { token, id, ...updates } = args;
         await ctx.db.patch(id, updates);
         return { success: true };
     },
 });
 
 export const deleteTelbook = mutation({
-    args: { id: v.id("ssy_telbook") },
+    args: {
+        token: v.string(),
+        id: v.id("ssy_telbook")
+    },
     handler: async (ctx, args) => {
+        // 验证系统维护权限 (menuId = 1)
+        await requirePermission(ctx, args.token, 1);
+
         await ctx.db.delete(args.id);
         return { success: true };
     },

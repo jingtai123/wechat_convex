@@ -1,6 +1,7 @@
 // convex/registration.ts
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requirePermission } from "./lib/auth";
 
 // 提交注册申请
 export const submitRegistration = mutation({
@@ -87,10 +88,16 @@ export const getRegistrationStatus = query({
   },
 });
 
-// 管理员审核通过
+// 管理员审核通过 - 需要系统管理权限 (menuId = 0)
 export const approveRegistration = mutation({
-  args: { pendingUserId: v.id("pendingUsers") },
+  args: {
+    token: v.string(),
+    pendingUserId: v.id("pendingUsers")
+  },
   handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     const pending = await ctx.db.get(args.pendingUserId);
     if (!pending) {
       return { success: false, message: "申请记录不存在" };
@@ -118,13 +125,17 @@ export const approveRegistration = mutation({
   },
 });
 
-// 管理员拒绝申请
+// 管理员拒绝申请 - 需要系统管理权限 (menuId = 0)
 export const rejectRegistration = mutation({
   args: {
+    token: v.string(),
     pendingUserId: v.id("pendingUsers"),
     reason: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     const pending = await ctx.db.get(args.pendingUserId);
     if (!pending) {
       return { success: false, message: "申请记录不存在" };
@@ -144,10 +155,13 @@ export const rejectRegistration = mutation({
   },
 });
 
-// 获取所有待审核申请（管理员用）
+// 获取所有待审核申请（管理员用）- 需要系统管理权限 (menuId = 0)
 export const getPendingRegistrations = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     return await ctx.db
       .query("pendingUsers")
       .withIndex("by_status", (q) => q.eq("status", "pending"))

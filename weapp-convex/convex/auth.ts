@@ -1,6 +1,7 @@
 // convex/auth.ts
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
+import { requirePermission } from "./lib/auth";
 
 type LoginResult =
   | { success: true; token: string }
@@ -72,7 +73,7 @@ export const checkManualLogin = internalMutation({
   },
 });
 
-// 根据 Token 获取用户信息
+// 根据 Token 获取用户信息（用于权限验证，不返回敏感字段）
 export const getUserByToken = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
@@ -80,13 +81,29 @@ export const getUserByToken = query({
       .query("users")
       .withIndex("by_token", (q) => q.eq("token", args.token))
       .first();
-    return user;
+
+    if (!user) {
+      return null;
+    }
+
+    // 返回数据脱敏：不返回 token 和 openid
+    return {
+      _id: user._id,
+      phoneNumber: user.phoneNumber,
+      name: user.name,
+      department: user.department,
+      roleId: user.roleId,
+      lastLogin: user.lastLogin,
+      // 不返回: token, openid
+    };
   },
 });
 
 
 
-// 根据角色ID获取角色信息
+// 根据角色ID获取角色信息（内部使用，用于权限验证系统）
+// 注意：此接口用于 permAction 中间件，不应添加权限验证以避免循环依赖
+// 管理员查询角色列表请使用 manager.listRoles
 export const getRoleById = query({
   args: { roleId: v.number() },
   handler: async (ctx, args) => {
@@ -97,9 +114,10 @@ export const getRoleById = query({
   },
 });
 
-// 批量导入白名单用户
+// 批量导入白名单用户 - 需要系统管理权限 (menuId = 0)
 export const batchImportAllowedUsers = mutation({
   args: {
+    token: v.string(),
     users: v.array(v.object({
       name: v.string(),
       phoneNumber: v.string(),
@@ -107,6 +125,14 @@ export const batchImportAllowedUsers = mutation({
     }))
   },
   handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
+    // 限制单次导入数量
+    if (args.users.length > 1000) {
+      throw new Error("单次最多导入1000个用户，请分批导入");
+    }
+
     const now = Date.now();
     let inserted = 0;
     let skipped = 0;

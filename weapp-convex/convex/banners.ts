@@ -1,6 +1,7 @@
 // convex/banners.ts
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requirePermission } from "./lib/auth";
 
 // 获取banner（公开接口）
 export const getActiveBanners = query({
@@ -30,22 +31,29 @@ export const getActiveBanners = query({
   },
 });
 
-// 生成上传URL（用于上传图片）
+// 生成上传URL（用于上传图片）- 需要系统管理权限 (menuId = 0)
 export const generateUploadUrl = mutation({
-  args: {},
-  handler: async (ctx) => {
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     return await ctx.storage.generateUploadUrl();
   },
 });
 
-// 添加banner记录
+// 添加banner记录 - 需要系统管理权限 (menuId = 0)
 export const addBanner = mutation({
   args: {
+    token: v.string(),
     storageId: v.id("_storage"),
     name: v.string(),
     sortOrder: v.number(),
   },
   handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     const bannerId = await ctx.db.insert("banners", {
       storageId: args.storageId,
       name: args.name,
@@ -57,10 +65,16 @@ export const addBanner = mutation({
   },
 });
 
-// 删除banner
+// 删除banner - 需要系统管理权限 (menuId = 0)
 export const deleteBanner = mutation({
-  args: { bannerId: v.id("banners") },
+  args: {
+    token: v.string(),
+    bannerId: v.id("banners")
+  },
   handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     const banner = await ctx.db.get(args.bannerId);
     if (banner) {
       // 删除存储的文件
@@ -72,10 +86,16 @@ export const deleteBanner = mutation({
   },
 });
 
-// 切换banner状态
+// 切换banner状态 - 需要系统管理权限 (menuId = 0)
 export const toggleBannerStatus = mutation({
-  args: { bannerId: v.id("banners") },
+  args: {
+    token: v.string(),
+    bannerId: v.id("banners")
+  },
   handler: async (ctx, args) => {
+    // 验证系统管理权限
+    await requirePermission(ctx, args.token, 0);
+
     const banner = await ctx.db.get(args.bannerId);
     if (banner) {
       await ctx.db.patch(args.bannerId, {
